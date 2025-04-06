@@ -13,14 +13,21 @@ DB_CONFIG = {
 }
 
 # Data from Excel
-file_path = "C:/Users/user/Desktop/texts.xlsx"
+file_path = "./texts.xlsx"
 df = pd.read_excel(file_path, header=2, usecols="B:D")
 
 print(df.columns)
 
 # connect to db
-conn = mysql.connector.connect(**DB_CONFIG)
-cursor = conn.cursor()
+try:
+    conn = mysql.connector.connect(**DB_CONFIG)
+    print("connection established1")
+    cursor = conn.cursor()
+except mysql.connector.Error as err:
+    print(f"Error: {err}")
+    exit(1)
+
+print("connection established2")
 
 # SQL-query for inserting data
 insert_query = """
