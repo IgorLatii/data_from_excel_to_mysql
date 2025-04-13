@@ -29,8 +29,8 @@ except mysql.connector.Error as err:
 
 # SQL-query to insert into question_answer table
 insert_query = """
-INSERT INTO question_answer (question, answer, language, created_at, updated_at, embedding)
-VALUES (%s, %s, %s, %s, %s, %s)
+INSERT INTO question_answer (question, answer, language, processed, created_at, updated_at, embedding)
+VALUES (%s, %s, %s, %s, %s, %s, %s)
 ON DUPLICATE KEY UPDATE question = VALUES(question), answer = VALUES(answer), language = VALUES(language), updated_at = VALUES(updated_at)
 """
 
@@ -39,11 +39,12 @@ for _, row in df.iterrows():
     question = row["question"]
     answer = row["answer"]
     language = row["language"]
+    processed = True
     created_at = now
     updated_at = now
     embedding = None
 
-    cursor.execute(insert_query, (question, answer, language, created_at, updated_at, embedding))
+    cursor.execute(insert_query, (question, answer, language, processed, created_at, updated_at, embedding))
 
 conn.commit()
 cursor.close()
